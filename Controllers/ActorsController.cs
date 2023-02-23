@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Data;
 using OnlineShop.Models;
 using System.Diagnostics;
 
 namespace OnlineShop.Controllers
 {
-    public class HomeController : Controller
+    public class ActorsController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ActorsController(AppDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public async Task<IActionResult> Index() => View(await _context.Actors.ToListAsync());
 
         public IActionResult Privacy()
         {
