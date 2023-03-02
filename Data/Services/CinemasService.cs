@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Data.Services
 {
-    public class CinemasService:IEntityBaseRepository<Cinema>, ICinemasService
+    public class CinemasService:EntityBaseRepository<Cinema>, ICinemasService
     {
         public CinemasService(AppDbContext context) : base(context)
         {

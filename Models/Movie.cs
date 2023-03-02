@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OnlineShop.Data.Base;
 using OnlineShop.Data.Enums;
 
 namespace OnlineShop.Models
 {
-    public class Movie
+    public class Movie : IEntityBase
     {
         [Key]
         public int Id { get; set; }

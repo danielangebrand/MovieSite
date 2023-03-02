@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace OnlineShop.Data.Base
 {
@@ -11,6 +12,15 @@ namespace OnlineShop.Data.Base
         }
 
         public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
+
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> q = _context.Set<T>();
+            q = includeProperties.Aggregate(q, (current, includeProperties) => current.Include(includeProperties));
+            return await q.ToListAsync();
+        }
+
+
         public async Task AddAsync(T entity)
         {
 

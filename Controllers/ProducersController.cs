@@ -35,11 +35,11 @@ namespace OnlineShop.Controllers
         {
             var p = await _service.GetByIdAsync(id);
             if (p != null) return View(p);
-            return View();
+            return View("NotFound");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfilePicURL,FullName,Bio")] Producer producer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProfilePicURL,FullName,Bio")] Producer producer)
         {
             if (!ModelState.IsValid) return View(producer);
 
