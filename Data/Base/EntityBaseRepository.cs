@@ -33,6 +33,12 @@ namespace OnlineShop.Data.Base
             var model = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
             return model;
         }
+        public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperty)
+        {
+            IQueryable<T> q = _context.Set<T>();
+            q = includeProperty.Aggregate(q, (current, includeProperty) => current.Include(includeProperty));
+            return await q.FirstOrDefaultAsync(m => m.Id == id);
+        }
 
         public async Task UpdateAsync(int id, T entity)
         {
