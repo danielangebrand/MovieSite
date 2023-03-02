@@ -1,12 +1,11 @@
-﻿@model IEnumerable<Actor>
+﻿@model IEnumerable<Producer>
 
 @{
-    ViewData["Title"] = "List of Actors";
+    ViewData["Title"] = "List of Producers";
 }
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
-
         <table class="table">
             <thead>
                 <tr class="text-center">
@@ -41,5 +40,7 @@
 </div>
 
 <div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
-    <a asp-controller="Actors" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i>Add New</a>
+    <a asp-controller="Producers" asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add New
+    </a>
 </div>

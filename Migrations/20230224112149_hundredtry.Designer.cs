@@ -12,8 +12,8 @@ using OnlineShop.Data;
 namespace OnlineShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230222150940_ballaballa")]
-    partial class ballaballa
+    [Migration("20230224112149_hundredtry")]
+    partial class hundredtry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,27 +25,7 @@ namespace OnlineShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OnlineShop.Models.Actor_Movie", b =>
-                {
-                    b.Property<int>("ActorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProducerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActorId", "MovieId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("ProducerId");
-
-                    b.ToTable("Actors_Movies");
-                });
-
-            modelBuilder.Entity("OnlineShop.Models.Character.Actor", b =>
+            modelBuilder.Entity("OnlineShop.Models.Actor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,29 +50,24 @@ namespace OnlineShop.Migrations
                     b.ToTable("Actors");
                 });
 
-            modelBuilder.Entity("OnlineShop.Models.Character.Producer", b =>
+            modelBuilder.Entity("OnlineShop.Models.Actor_Movie", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ActorId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ProducerId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ActorId", "MovieId");
 
-                    b.Property<string>("ProfilePicURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("MovieId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ProducerId");
 
-                    b.ToTable("Producers");
+                    b.ToTable("Actors_Movies");
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Cinema", b =>
@@ -167,9 +142,34 @@ namespace OnlineShop.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("OnlineShop.Models.Producer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Producers");
+                });
+
             modelBuilder.Entity("OnlineShop.Models.Actor_Movie", b =>
                 {
-                    b.HasOne("OnlineShop.Models.Character.Actor", "Actor")
+                    b.HasOne("OnlineShop.Models.Actor", "Actor")
                         .WithMany("Actors_Movies")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -181,7 +181,7 @@ namespace OnlineShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineShop.Models.Character.Producer", null)
+                    b.HasOne("OnlineShop.Models.Producer", null)
                         .WithMany("Actors_Movies")
                         .HasForeignKey("ProducerId");
 
@@ -198,7 +198,7 @@ namespace OnlineShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineShop.Models.Character.Producer", "Producer")
+                    b.HasOne("OnlineShop.Models.Producer", "Producer")
                         .WithMany()
                         .HasForeignKey("ProducerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -209,12 +209,7 @@ namespace OnlineShop.Migrations
                     b.Navigation("Producer");
                 });
 
-            modelBuilder.Entity("OnlineShop.Models.Character.Actor", b =>
-                {
-                    b.Navigation("Actors_Movies");
-                });
-
-            modelBuilder.Entity("OnlineShop.Models.Character.Producer", b =>
+            modelBuilder.Entity("OnlineShop.Models.Actor", b =>
                 {
                     b.Navigation("Actors_Movies");
                 });
@@ -225,6 +220,11 @@ namespace OnlineShop.Migrations
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Movie", b =>
+                {
+                    b.Navigation("Actors_Movies");
+                });
+
+            modelBuilder.Entity("OnlineShop.Models.Producer", b =>
                 {
                     b.Navigation("Actors_Movies");
                 });

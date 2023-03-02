@@ -11,10 +11,10 @@ namespace OnlineShop.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
-        {
-            var model = await _context.Movies.ToListAsync();
-            return View();
-        }
+        public async Task<IActionResult> Index() => View(await _context.Movies.Include(c => c.Cinema).OrderBy(n => n.Name).ToListAsync());
+        //{
+        //    var model = await _context.Movies.ToListAsync();
+        //    return View(model);
+        //}
     }
 }
