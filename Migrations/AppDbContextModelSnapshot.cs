@@ -44,7 +44,7 @@ namespace OnlineShop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actors", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Actor_Movie", b =>
@@ -64,7 +64,7 @@ namespace OnlineShop.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Actors_Movies");
+                    b.ToTable("Actors_Movies", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Cinema", b =>
@@ -89,7 +89,7 @@ namespace OnlineShop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinemas");
+                    b.ToTable("Cinemas", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Movie", b =>
@@ -136,7 +136,7 @@ namespace OnlineShop.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Producer", b =>
@@ -161,7 +161,7 @@ namespace OnlineShop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Producers");
+                    b.ToTable("Producers", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Models.Actor_Movie", b =>

@@ -8,5 +8,6 @@ namespace OnlineShop.Data.Services
         Task<Movie> GetMovieByIdAsync(int id);
         Task<NewMovieDropdownsVM> GetNewMovieDropdownsValues();
         Task AddNewMovieAsync(NewMovieVM m);
+        Task UpdateMovieAsync(NewMovieVM data);
     }
 }

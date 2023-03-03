@@ -61,5 +61,40 @@ namespace OnlineShop.Data.Services
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateMovieAsync(NewMovieVM data)
+        {
+            var dbM = await _context.Movies.FirstOrDefaultAsync(n => n.Id == data.Id);
+
+            if (dbM != null)
+            {
+                dbM.Name = data.Name;
+                dbM.Descr = data.Descr;
+                dbM.Price = data.Price;
+                dbM.ImageURL = data.ImgURL;
+                dbM.CinemaId = data.CinemaId;
+                dbM.StartDate = data.StartDate;
+                dbM.EndDate = data.EndDate;
+                dbM.MovieCategory = data.MovieCategory;
+                dbM.ProducerId = data.ProducerId;
+                await _context.SaveChangesAsync();
+            }
+            //Remove existing actors
+            var existingActorsDb = _context.Actors_Movies.Where(n => n.MovieId == data.Id).ToList();
+            _context.Actors_Movies.RemoveRange(existingActorsDb);
+            await _context.SaveChangesAsync();
+
+            //Add Movie_Actors
+            foreach (var actorId in data.ActorId)
+            {
+                var am = new Actor_Movie()
+                {
+                    MovieId = data.Id,
+                    ActorId = actorId
+                };
+                await _context.Actors_Movies.AddAsync(am);
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }
