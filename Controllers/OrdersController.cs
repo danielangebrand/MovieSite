@@ -13,17 +13,43 @@ namespace OnlineShop.Controllers
             _moviesService = moviesService;
             _shoppingCart = shoppingCart;
         }
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    var items = _shoppingCart.GetShoppingCartItems();
+        //    _shoppingCart.ShoppingCartItems = items;
+            
+        //    var response = new ShoppingCartVM()
+        //    {
+        //        ShoppingCart = _shoppingCart,
+        //        ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+        //    };
+        //    return View(response);
+        //}
+
+        public IActionResult ShoppingCart()
         {
             var items = _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
-            
+
             var response = new ShoppingCartVM()
             {
                 ShoppingCart = _shoppingCart,
                 ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
             };
+
             return View(response);
+        }
+
+        public async Task<RedirectToActionResult> AddItemToShoppingCart(int id)
+        {
+            var item = await _moviesService.GetMovieByIdAsync(id);
+
+            if (item != null)
+            {
+                _shoppingCart.AddItemToCart(item);
+            }
+
+            return RedirectToAction(nameof(ShoppingCart));
         }
     }
 }

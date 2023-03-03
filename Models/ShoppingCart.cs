@@ -21,7 +21,7 @@ namespace OnlineShop.Models
 
         public void AddItemToCart(Movie movie)
         {
-            var item = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.Id == movie.Id);
+            var item = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.Id == movie.Id && n.ShoppingCartId == ShoppingCartId);
             if (item == null)
             {
                 item = new ShoppingCartItem()
@@ -53,6 +53,17 @@ namespace OnlineShop.Models
                 }
                 _context.SaveChanges();
             }
+        }
+
+        public static ShoppingCart GetShoppingCart(IServiceProvider services)
+        {
+            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+            var context = services.GetService<AppDbContext>();
+
+            string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
+            session.SetString("CartId", cartId);
+
+            return new ShoppingCart(context) { ShoppingCartId = cartId};
         }
     }
 }
