@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Data.Services;
+using OnlineShop.Data.Static;
 using OnlineShop.Data.ViewModels;
 using System.Linq.Expressions;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class MoviesController : Controller
     {
         private readonly IMoviesService _service;
@@ -15,12 +18,13 @@ namespace OnlineShop.Controllers
         {
             _service = service;
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var m = await _service.GetAllAsync(c => c.Cinema);
             return View(await _service.GetAllAsync());
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var m = await _service.GetMovieByIdAsync(id);
@@ -100,14 +104,17 @@ namespace OnlineShop.Controllers
             await _service.UpdateMovieAsync(m);
             return RedirectToAction(nameof(Index));
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Filter(string search)
         {
             var mList = await _service.GetAllAsync(m => m.Cinema);
             if (!string.IsNullOrEmpty(search))
             {
-                var filter = mList.Where(n => n.Name.Contains(search) || n.Descr.Contains(search)).ToList();
-                return View("Index", filter);
+                //var filter = mList.Where(n => n.Name.Contains(search) || n.Descr.Contains(search)).ToList();
+                //return View("Index", filter);
+                var filteredResultNew = mList.Where(n => string.Equals(n.Name, search, StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Descr, search, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                return View("Index", filteredResultNew);
             }
 
             return View("Index", mList);

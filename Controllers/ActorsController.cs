@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
 using OnlineShop.Data.Services;
+using OnlineShop.Data.Static;
+using OnlineShop.Data.ViewModels;
 using OnlineShop.Models;
 using System.Diagnostics;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class ActorsController : Controller
     {
         private readonly IActorsService _service;
@@ -14,7 +18,7 @@ namespace OnlineShop.Controllers
         {
             _service = service;
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index()/* => View(await _service.GetAllActors().ToListAsync());*/
         {
             var model = await _service.GetAllAsync();
@@ -32,6 +36,7 @@ namespace OnlineShop.Controllers
             await _service.AddAsync(actor);
             return RedirectToAction(nameof(Index));
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id) => (await _service.GetByIdAsync(id)) != null ? View(await _service.GetByIdAsync(id)) : View("NotFound");
 
         public async Task<IActionResult> Edit(int id) => (await _service.GetByIdAsync(id)) != null ? View(await _service.GetByIdAsync(id)) : View("NotFound");
@@ -56,5 +61,7 @@ namespace OnlineShop.Controllers
             await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

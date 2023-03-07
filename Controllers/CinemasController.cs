@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Data.Services;
+using OnlineShop.Data.Static;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class CinemasController : Controller
     {
         private readonly ICinemasService _service;
-
         public CinemasController(ICinemasService service)
         {
             _service = service;
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var model = await _service.GetAllAsync();
@@ -28,7 +31,7 @@ namespace OnlineShop.Controllers
             await _service.AddAsync(cinema);
             return RedirectToAction(nameof(Index));
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var c = await _service.GetByIdAsync(id);

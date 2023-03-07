@@ -1,8 +1,10 @@
 ﻿namespace OnlineShop.Data;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Models;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Movie> Movies { get; set; }

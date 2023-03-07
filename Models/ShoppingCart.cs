@@ -21,7 +21,8 @@ namespace OnlineShop.Models
 
         public void AddItemToCart(Movie movie)
         {
-            var item = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.Id == movie.Id && n.ShoppingCartId == ShoppingCartId);
+            var item = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.Id == movie.Id
+            && n.ShoppingCartId == ShoppingCartId);
             if (item == null)
             {
                 item = new ShoppingCartItem()
@@ -30,13 +31,17 @@ namespace OnlineShop.Models
                     Movie = movie,
                     Amount = 1
                 };
+                _context.ShoppingCartItems.Add(item);
             }
-            else item.Amount++;
+            else
+            {
+                item.Amount++;
+            }
 
             _context.SaveChanges();
         }
 
-        public void RemoveItemFromCart(Movie movie) 
+        public void RemoveItemFromCart(Movie movie)
         {
             var item = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.Id == movie.Id && n.ShoppingCartId == ShoppingCartId);
 
@@ -63,7 +68,14 @@ namespace OnlineShop.Models
             string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
             session.SetString("CartId", cartId);
 
-            return new ShoppingCart(context) { ShoppingCartId = cartId};
+            return new ShoppingCart(context) { ShoppingCartId = cartId };
+        }
+
+        public async Task ClearShoppingCartAsync()
+        {
+            var items = await _context.ShoppingCartItems.Where(n => n.ShoppingCartId == ShoppingCartId).ToListAsync();
+            _context.ShoppingCartItems.RemoveRange(items);
+            await _context.SaveChangesAsync();
         }
     }
 }

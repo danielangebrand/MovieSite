@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Data.Services;
+using OnlineShop.Data.Static;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class ProducersController : Controller
     {
         private readonly IProducersService _service;
@@ -12,12 +15,13 @@ namespace OnlineShop.Controllers
         {
             _service = service;
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var model = await _service.GetAllAsync();
             return View(model);
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id) => (await _service.GetByIdAsync(id)) != null ? View(await _service.GetByIdAsync(id)) : View("NotFound");
 
         public IActionResult Create() => View();
